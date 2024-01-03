@@ -1,13 +1,22 @@
 import { bcryptAdapter } from '../../config';
 import { UserModel } from '../../data';
-import { CustomError, RegisterUserDto, UserEntity } from '../../domain';
+import { CustomError, RegisterUserDto, UserEntity, LoginUserDto } from '../../domain';
 
 export class AuthService {
 	//DI
 	constructor() {}
 
+	static async findUserByEmail(email: string) {
+		try {
+			const user = await UserModel.findOne({ email });
+			return user;
+		} catch (error) {
+			throw CustomError.internalServer(`${error}`);
+		}
+	}
+
 	public async registerUser(registerUserDto: RegisterUserDto) {
-		const existUser = await UserModel.findOne({ email: registerUserDto.email });
+		const existUser = await AuthService.findUserByEmail(registerUserDto.email);
 		if (existUser) throw CustomError.badRequest('Email already exist');
 
 		try {
@@ -25,11 +34,25 @@ export class AuthService {
 
 			return {
 				user: userEntity,
-				token: password,
+				token: 'ABC',
 			};
 		} catch (error) {
 			throw CustomError.internalServer(`${error}`);
 		}
+	}
+	public async loginUser(loginUserDto: LoginUserDto) {
+		const user = await AuthService.findUserByEmail(loginUserDto.email);
+		if (!user) throw CustomError.badRequest('User not found with this credentials');
+
+		const errorPassword = !bcryptAdapter.compare(loginUserDto.password, user.password);
+		if (errorPassword) throw CustomError.badRequest('User not found with this credentials');
+
+		const { password, ...userEntity } = UserEntity.fromObject(user);
+
+		return {
+			user: userEntity,
+			token: 'ABC',
+		};
 	}
 }
 //Una vez que llego aca es porque los datos que me envia el cliente parecen ser correctos
