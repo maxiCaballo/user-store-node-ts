@@ -12,11 +12,7 @@ export class RegisterUserDto {
 		if (!password) return { error: 'Missing password' };
 		if (password.length < 6) return { error: 'Password length must be greater than 6' };
 
-		const registerUserDto = {
-			name,
-			email,
-			password,
-		};
+		const registerUserDto = new RegisterUserDto(name, email, password);
 
 		return { registerUserDto };
 	}
