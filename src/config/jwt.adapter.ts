@@ -13,7 +13,16 @@ export class JwtAdapter {
 			});
 		});
 	}
+
 	static validateToken(token: string) {
-		throw new Error('Not implemented');
+		return new Promise((resolve) => {
+			jwt.verify(token, JWT_SECRET_KEY, (err, decoded) => {
+				if (err) {
+					return resolve(null);
+				}
+
+				resolve(decoded);
+			});
+		});
 	}
 }
