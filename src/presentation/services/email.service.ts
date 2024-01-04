@@ -34,6 +34,7 @@ export class EmailService {
 		const { to, subject, htmlBody, attachements = [] } = options;
 
 		try {
+			//Propiedad para enviar o no email basado en variable de entorno
 			if (!this.postToProvider) return true;
 
 			const sentInformation = await this.transporter.sendMail({
