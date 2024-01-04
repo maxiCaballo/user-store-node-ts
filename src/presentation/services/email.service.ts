@@ -15,7 +15,12 @@ export interface Attachement {
 export class EmailService {
 	private transporter: Transporter;
 
-	constructor(mailerService: string, mailerEmail: string, senderEmailPassword: string) {
+	constructor(
+		mailerService: string,
+		mailerEmail: string,
+		senderEmailPassword: string,
+		private readonly postToProvider: boolean,
+	) {
 		this.transporter = nodemailer.createTransport({
 			service: mailerService,
 			auth: {
@@ -29,6 +34,8 @@ export class EmailService {
 		const { to, subject, htmlBody, attachements = [] } = options;
 
 		try {
+			if (!this.postToProvider) return true;
+
 			const sentInformation = await this.transporter.sendMail({
 				to: to,
 				subject: subject,
