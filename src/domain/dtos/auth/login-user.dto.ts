@@ -1,7 +1,7 @@
 import { regularExps } from '../../../config';
 
 export class LoginUserDto {
-	constructor(public readonly email: string, public readonly password: string) {}
+	private constructor(public readonly email: string, public readonly password: string) {}
 
 	static create(object: { [key: string]: any }): { error?: string; loginUserDto?: LoginUserDto } {
 		const { email, password } = object;
@@ -10,10 +10,7 @@ export class LoginUserDto {
 		if (!email) return { error: 'Missing email' };
 		if (!regularExps.email.test(email)) return { error: 'Invalid email' };
 
-		const loginUserDto = {
-			email,
-			password,
-		};
+		const loginUserDto = new LoginUserDto(email, password);
 
 		return { loginUserDto };
 	}
