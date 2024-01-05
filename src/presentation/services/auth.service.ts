@@ -65,6 +65,7 @@ export class AuthService {
 			const user = await new UserModel(registerUserDto); //Mongo user
 
 			//Encriptar la contraseña
+			//* Con mongoose se podria tener un metodo en el modelo que cada vez que vaya a guardar un user hashee la password
 			user.password = bcryptAdapter.hash(registerUserDto.password);
 			await user.save();
 
