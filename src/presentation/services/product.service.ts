@@ -1,4 +1,4 @@
-import { ProductModel } from '../../data';
+import { ProductModel } from '../../data/mongo';
 import { CustomError } from '../../domain';
 import { CreateProductDto } from '../../domain/dtos/product/create-product.dto';
 import { PaginationDto } from '../../domain/dtos/shared/pagination.dto';

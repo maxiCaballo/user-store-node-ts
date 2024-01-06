@@ -1,5 +1,5 @@
 import { JwtAdapter, bcryptAdapter, envs } from '../../config';
-import { UserModel } from '../../data';
+import { UserModel } from '../../data/mongo';
 import { CustomError, RegisterUserDto, UserEntity, LoginUserDto } from '../../domain';
 import { EmailService } from './email.service';
 

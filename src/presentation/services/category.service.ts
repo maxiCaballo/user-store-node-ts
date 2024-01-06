@@ -1,4 +1,4 @@
-import { CategoryModel } from '../../data';
+import { CategoryModel } from '../../data/mongo';
 import { UserEntity, CreateCategoryDto, CustomError, PaginationDto } from '../../domain';
 
 export class CategoryService {
