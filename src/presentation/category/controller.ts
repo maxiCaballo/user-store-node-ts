@@ -37,3 +37,7 @@ export class CategoryController {
 			.catch((error) => this.handleError(error, res));
 	};
 }
+
+//Si la persona que me esta pegando al endpoint de createCategory me proporciona un token valido
+//el middleware encola el usuario al body y se lo pasa con la funcion next al controlador que se
+//lo pasas al servicio porque asi lo definimos en el modelo.
