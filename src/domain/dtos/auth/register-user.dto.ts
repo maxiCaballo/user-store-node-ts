@@ -1,4 +1,4 @@
-import { regularExps } from '../../../config';
+import { Validator } from '../../../config';
 
 export class RegisterUserDto {
 	constructor(public readonly name: string, public readonly email: string, public readonly password: string) {}
@@ -8,7 +8,7 @@ export class RegisterUserDto {
 
 		if (!name) return { error: 'Missing name' };
 		if (!email) return { error: 'Missing email' };
-		if (!regularExps.email.test(email)) return { error: 'Invalid email' };
+		if (!Validator.email.test(email)) return { error: 'Invalid email' };
 		if (!password) return { error: 'Missing password' };
 		if (password.length < 6) return { error: 'Password length must be greater than 6' };
 

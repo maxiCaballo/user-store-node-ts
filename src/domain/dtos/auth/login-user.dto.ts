@@ -1,4 +1,4 @@
-import { regularExps } from '../../../config';
+import { Validator } from '../../../config';
 
 export class LoginUserDto {
 	private constructor(public readonly email: string, public readonly password: string) {}
@@ -8,7 +8,7 @@ export class LoginUserDto {
 
 		if (!password) return { error: 'Missing password' };
 		if (!email) return { error: 'Missing email' };
-		if (!regularExps.email.test(email)) return { error: 'Invalid email' };
+		if (!Validator.email.test(email)) return { error: 'Invalid email' };
 
 		const loginUserDto = new LoginUserDto(email, password);
 
