@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { FileUploadController } from './controller';
-import { AuthMiddleware } from '../middlewares/auth.middleware';
+import { AuthMiddleware, FileUploadMiddleware } from '../middlewares';
 import { FileUploadService } from '../services';
 
 export class FileUploadRoutes {
@@ -10,9 +10,9 @@ export class FileUploadRoutes {
 		const fileUploadService = new FileUploadService();
 		const fileUploadController = new FileUploadController(fileUploadService);
 
-		//router.use(AuthMiddleware.validateJWT);
-		router.post('/single/:type', fileUploadController.uploadFile);
-		router.get('/multiple/:type', fileUploadController.uploadFiles);
+		router.use(/*AuthMiddleware.validateJWT,*/ FileUploadMiddleware.containFiles);
+		router.post('/single/:type', FileUploadMiddleware.isValidUploadType, fileUploadController.uploadFile);
+		router.post('/multiple/:type', FileUploadMiddleware.isValidUploadType, fileUploadController.uploadFiles);
 
 		return router;
 	}

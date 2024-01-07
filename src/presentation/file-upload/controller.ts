@@ -3,8 +3,6 @@ import { CustomError } from '../../domain';
 import { FileUploadService } from '../services/file-upload.service';
 import { UploadedFile } from 'express-fileupload';
 
-const validTypes = ['users', 'products', 'categories'];
-
 export class FileUploadController {
 	//DI
 	constructor(private fileUploadService: FileUploadService) {}
@@ -19,18 +17,11 @@ export class FileUploadController {
 	};
 
 	uploadFile = (req: Request, res: Response) => {
+		//Se chequea en el middleware si existe el type y es valido
 		const type = req.params.type;
-		if (!validTypes.includes(type)) {
-			return res.status(400).json({
-				error: `Invalid type: ${type}, valid ones: ${validTypes}`,
-			});
-		}
 
-		if (!req.files || Object.keys(req.files).length === 0) {
-			return res.status(400).json({ error: 'No file was recived on the server' });
-		}
-
-		const file = req.files.file as UploadedFile;
+		//Se chequea en el middleware si existe algo en el req.files
+		const file = Object.values(req.files!).at(0) as UploadedFile;
 
 		this.fileUploadService
 			.uploadSingle(file, `uploads/${type}`)
@@ -39,7 +30,16 @@ export class FileUploadController {
 	};
 
 	uploadFiles = (req: Request, res: Response) => {
-		res.json('Upload files controller');
+		//Se chequea en el middleware si existe el type y es valido
+		const type = req.params.type;
+
+		//Se chequea en el middleware si existe algo en el req.files
+		const files = Object.values(req.files!) as UploadedFile[];
+
+		this.fileUploadService
+			.uploadMultiple(files!, `uploads/${type}`)
+			.then((uploaded) => res.json(uploaded))
+			.catch((error) => this.handleError(error, res));
 	};
 }
 

@@ -16,14 +16,13 @@ export class FileUploadService {
 	public async uploadSingle(
 		file: UploadedFile,
 		folder: string = 'uploads',
-		validExtensions: string[] = ['png', 'jpg', 'jpeg', 'gif'],
+		validExtensions: string[] = ['png', 'jpg', 'jpeg', 'gif', 'pdf'],
 	) {
 		try {
 			// mimetype : 'image/jpeg'
 			const fileExtension = file.mimetype.split('/').at(1) ?? ''; //['image','jpeg']
 
 			if (!validExtensions.includes(fileExtension)) {
-				console.log('hola');
 				throw CustomError.badRequest(`File extension not allowed: ${fileExtension}, valid extensions : ${validExtensions}`);
 			}
 
@@ -34,7 +33,6 @@ export class FileUploadService {
 
 			//le asigno un nombre y extension y lo muevo a la carpeta que me mandaron
 			const fileName = `${this.uuid()}.${fileExtension}`;
-
 			file.mv(`${destinationPath}/${fileName}`);
 
 			return { fileName };
@@ -44,8 +42,12 @@ export class FileUploadService {
 	}
 
 	public async uploadMultiple(
-		file: any[],
+		files: UploadedFile[],
 		folder: string = 'uploads',
-		validExtensions: string[] = ['png', 'jpg', 'jpeg', 'gif'],
-	) {}
+		validExtensions: string[] = ['png', 'jpg', 'jpeg', 'gif', 'pdf'],
+	) {
+		const filesName = await Promise.all(files.map((file) => this.uploadSingle(file, folder, validExtensions)));
+
+		return filesName;
+	}
 }
