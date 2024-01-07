@@ -27,13 +27,14 @@ export class FileUploadService {
 				throw CustomError.badRequest(`File extension not allowed: ${fileExtension}, valid extensions : ${validExtensions}`);
 			}
 
-			const destinationPath = path.resolve(__dirname, '../../../', folder);
+			const destinationPath = path.resolve(__dirname, '../../../', `${folder}`);
 
 			//Me fijo si existe en ese path la carpeta folder en este caso 'uploads', si no existe la crea
 			this.checkFolder(destinationPath);
 
 			//le asigno un nombre y extension y lo muevo a la carpeta que me mandaron
 			const fileName = `${this.uuid()}.${fileExtension}`;
+
 			file.mv(`${destinationPath}/${fileName}`);
 
 			return { fileName };
